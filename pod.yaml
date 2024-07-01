@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: portfolio
+spec:
+  volumes:
+    - name: "c1-mount"
+      hostPath: 
+        path: "/Users/mac/git/kubernetes/mount-c1"
+  containers:
+  - name: portfolio-c1
+    image: chilledout/personal-portfolio-web:latest
+    volumeMounts:
+      - mountPath: "/tesla"
+        name: "c1-mount"
+    livenessProbe:
+      httpGet:
+        path: /about
+        port: 80
+      initialDelaySeconds: 5
+      timeoutSeconds: 1
+      periodSeconds: 10
+      failureThreshold: 3
+    resources:
+      requests:
+        memory: "100Mi"
+        cpu: "0.5"
+      limits:
+        memory: "200Mi"
+        cpu: "0.5"
+    ports:
+      - containerPort: 80
+        name: http
+        protocol: TCP
+  imagePullSecrets:
+  - name: my-dockerhub-secret

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kautomate-pwsh
+  labels:
+    app: kpwsh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kpwsh
+  template:
+    metadata:
+      labels:
+        app: kpwsh
+    spec:
+      containers:
+      - name: kpwsh-container
+        image: mcr.microsoft.com/powershell
+        ports:
+        - containerPort: 82

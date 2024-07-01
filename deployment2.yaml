@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pode-deploy
+  labels:
+    app: podedeploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: podedeploy
+  template:
+    metadata:
+      labels:
+        app: podedeploy
+    spec:
+      containers:
+      - name: pode-deploy-c1
+        image: chilledout/my-scratch-image:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 2
+          initialDelaySeconds: 0
+          failureThreshold: 3
+          successThreshold: 1
+      imagePullSecrets:
+      - name: my-dockerhub-secret
+  
